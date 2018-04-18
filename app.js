@@ -18,7 +18,7 @@ function Item(url, name) {
   this.name = name;
   this.votes = 0;
   this.shows = 0;
-  this.votePercent = 0;
+  
 
 }
 
@@ -45,6 +45,9 @@ var allItemsForSale = [
   new Item('img/wine-glass.jpg','wine-glass'),
 
 ];
+
+
+
 
 var item1 = allItemsForSale[0];
 var item2 = allItemsForSale[1];
@@ -109,13 +112,19 @@ function pickNewItem() {
 pickNewItem();
 
 //create a list
+
+var arrayOfNames = [];
+var arrayOfVotes = [];
+
 function renderList(){
   var position = document.getElementById('list-of-results');
   for (var i = 0; i < allItemsForSale.length; i++ ) {
-
+    
+    arrayOfNames.push(allItemsForSale[i].name);
+    arrayOfVotes.push(allItemsForSale[i].votes);
+    
     var newEl = document.createElement('li');
-
-    newEl.textContent = allItemsForSale[i].name + ' ----  votes: ' + allItemsForSale[i].votes + ' , displayed: ' + allItemsForSale[i].shows + ' , picked %:  ' + allItemsForSale[i].votePercent;
+    newEl.textContent = allItemsForSale[i].name + ' ----  votes: ' + allItemsForSale[i].votes + ' , displayed: ' + allItemsForSale[i].shows;
     position.appendChild(newEl);
   }
 }
@@ -127,25 +136,21 @@ function removeEvent(){
     item2Button.removeEventListener('click', item2Button.addEventListener);
     item3Button.removeEventListener('click', item3Button.addEventListener);
     renderList();
+    Item.renderChart();
   }
 }
 
-// function getTotalPercent() {
-
-this.renderChart = function(){
-
-
-
+/// didplay chart
+Item.renderChart = function(){
   var ctx = document.getElementById('item-chart');
 
   new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: allItemsForSale.name,
+      labels: arrayOfNames,
       datasets: [{
-        label: 'item votes',
-        data: allItemsForSale.votes,
-        
+        label: 'Votes per Item',
+        data: arrayOfVotes,
         hoverBackgroundColor: 'black'
       }]
     },
@@ -164,3 +169,4 @@ this.renderChart = function(){
     }
   });
 };
+
