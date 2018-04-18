@@ -109,7 +109,6 @@ function pickNewItem() {
   oldItem3 = item3;
 
 }
-
 pickNewItem();
 
 //create a list
@@ -130,10 +129,8 @@ function removeEvent(){
     item1Button.removeEventListener('click', item1Button.addEventListener);
     item2Button.removeEventListener('click', item2Button.addEventListener);
     item3Button.removeEventListener('click', item3Button.addEventListener);
-    renderList()
+    renderList();
   }
 }
 
 // function getTotalPercent() {
-  
-// }
