@@ -69,7 +69,7 @@ item2Button.addEventListener('click', function(){
   totalClickCounter++;
   pickNewItem();
   removeEvent();
-  
+
 });
 // button  updates # of votes and  # of shows
 item3Button.addEventListener('click', function(){
@@ -80,7 +80,7 @@ item3Button.addEventListener('click', function(){
   totalClickCounter++;
   pickNewItem();
   removeEvent();
-  
+
 });
 
 //picking new random items from array
@@ -89,25 +89,22 @@ var oldItem2 = item2;
 var oldItem3 = item3;
 
 function pickNewItem() {
+  if (totalClickCounter < 25) {
+    do {item1 = allItemsForSale[Math.floor(Math.random() * allItemsForSale.length)];
+    } while (item1 === oldItem1 || item1 === oldItem2 || item1 === oldItem3);
+    item1Img.src = item1.url;
+    oldItem1 = item1;
 
-  do {item1 = allItemsForSale[Math.floor(Math.random() * allItemsForSale.length)];
-  } while (item1 === oldItem1 || item1 === oldItem2 || item1 === oldItem3);
-  item1Img.src = item1.url;
+    do {item2 = allItemsForSale[Math.floor(Math.random() * allItemsForSale.length)];
+    } while (item2 === item1 || item2 === oldItem1 || item2 === oldItem2 || item2 === oldItem3);
+    item2Img.src = item2.url;
+    oldItem2 = item2;
 
-  oldItem1 = item1;
-
-  do {item2 = allItemsForSale[Math.floor(Math.random() * allItemsForSale.length)];
-  } while (item2 === item1 || item2 === oldItem1 || item2 === oldItem2 || item2 === oldItem3);
-  item2Img.src = item2.url;
-
-  oldItem2 = item2;
-
-  do {item3 = allItemsForSale[Math.floor(Math.random() * allItemsForSale.length)];
-  } while (item3 === item2 || item3 === item1 || item3 === oldItem1 || item3 === oldItem2 || item3 === oldItem3);
-  item3Img.src = item3.url;
-
-  oldItem3 = item3;
-
+    do {item3 = allItemsForSale[Math.floor(Math.random() * allItemsForSale.length)];
+    } while (item3 === item2 || item3 === item1 || item3 === oldItem1 || item3 === oldItem2 || item3 === oldItem3);
+    item3Img.src = item3.url;
+    oldItem3 = item3;
+  }
 }
 pickNewItem();
 
@@ -134,3 +131,36 @@ function removeEvent(){
 }
 
 // function getTotalPercent() {
+
+this.renderChart = function(){
+
+
+
+  var ctx = document.getElementById('item-chart');
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: allItemsForSale.name,
+      datasets: [{
+        label: 'item votes',
+        data: allItemsForSale.votes,
+        
+        hoverBackgroundColor: 'black'
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      },
+      title: {
+        display: true,
+        text: 'Results'
+      }
+    }
+  });
+};
