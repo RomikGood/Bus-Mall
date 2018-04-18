@@ -1,5 +1,5 @@
 'use strict';
-console.log('js file is linked');
+
 
 var item1Button = document.getElementById('item1-button');
 var item2Button = document.getElementById('item2-button');
@@ -9,33 +9,40 @@ var item1Img = document.getElementById('item1-img');
 var item2Img = document.getElementById('item2-img');
 var item3Img = document.getElementById('item3-img');
 
-function Item(url) {
+var totalClickCounter = 0;
+
+
+//item constructon
+function Item(url, name) {
   this.url = url;
+  this.name = name;
   this.votes = 0;
   this.shows = 0;
+  this.votePercent = 0;
+
 }
 
 var allItemsForSale = [
-  new Item('img/bag.jpg'),
-  new Item('img/banana.jpg'),
-  new Item('img/bathroom.jpg'),
-  new Item('img/boots.jpg'),
-  new Item('img/breakfast.jpg'),
-  new Item('img/bubblegum.jpg'),
-  new Item('img/chair.jpg'),
-  new Item('img/cthulhu.jpg'),
-  new Item('img/dog-duck.jpg'),
-  new Item('img/dragon.jpg'),
-  new Item('img/pen.jpg'),
-  new Item('img/pet-sweep.jpg'),
-  new Item('img/scissors.jpg'),
-  new Item('img/shark.jpg'),
-  new Item('img/sweep.png'),
-  new Item('img/tauntaun.jpg'),
-  new Item('img/unicorn.jpg'),
-  new Item('img/usb.gif'),
-  new Item('img/water-can.jpg'),
-  new Item('img/wine-glass.jpg'),
+  new Item('img/bag.jpg', 'bag'),
+  new Item('img/banana.jpg', 'banana'),
+  new Item('img/bathroom.jpg','bathroom'),
+  new Item('img/boots.jpg', 'boots'),
+  new Item('img/breakfast.jpg', 'breakfast'),
+  new Item('img/bubblegum.jpg', 'bubblegum'),
+  new Item('img/chair.jpg', 'chair'),
+  new Item('img/cthulhu.jpg', 'cthulhu'),
+  new Item('img/dog-duck.jpg','dog-duck'),
+  new Item('img/dragon.jpg','dragon'),
+  new Item('img/pen.jpg','pen'),
+  new Item('img/pet-sweep.jpg','pet-sweep'),
+  new Item('img/scissors.jpg','scissors'),
+  new Item('img/shark.jpg','shark'),
+  new Item('img/sweep.png','sweep'),
+  new Item('img/tauntaun.jpg','tauntaun'),
+  new Item('img/unicorn.jpg','unicorn'),
+  new Item('img/usb.gif','usb'),
+  new Item('img/water-can.jpg','water-can'),
+  new Item('img/wine-glass.jpg','wine-glass'),
 
 ];
 
@@ -49,7 +56,9 @@ item1Button.addEventListener('click', function(){
   item1.shows ++;
   item2.shows ++;
   item3.shows ++;
+  totalClickCounter++;
   pickNewItem();
+  removeEvent();
 });
 
 item2Button.addEventListener('click', function(){
@@ -57,7 +66,10 @@ item2Button.addEventListener('click', function(){
   item1.shows ++;
   item2.shows ++;
   item3.shows ++;
+  totalClickCounter++;
   pickNewItem();
+  removeEvent();
+  
 });
 // button  updates # of votes and  # of shows
 item3Button.addEventListener('click', function(){
@@ -65,30 +77,60 @@ item3Button.addEventListener('click', function(){
   item1.shows ++;
   item2.shows ++;
   item3.shows ++;
+  totalClickCounter++;
   pickNewItem();
+  removeEvent();
+  
 });
 
+//picking new random items from array
+var oldItem1 = item1;
+var oldItem2 = item2;
+var oldItem3 = item3;
+
 function pickNewItem() {
-  item1 = allItemsForSale[Math.floor(Math.random() * allItemsForSale.length)];
+
+  do {item1 = allItemsForSale[Math.floor(Math.random() * allItemsForSale.length)];
+  } while (item1 === oldItem1 || item1 === oldItem2 || item1 === oldItem3);
   item1Img.src = item1.url;
-  item2 = allItemsForSale[Math.floor(Math.random() * allItemsForSale.length)];
-  item2Img.src =item2.url;
-  item3 = allItemsForSale[Math.floor(Math.random() * allItemsForSale.length)];
-  item3Img.src =item3.url;
+
+  oldItem1 = item1;
+
+  do {item2 = allItemsForSale[Math.floor(Math.random() * allItemsForSale.length)];
+  } while (item2 === item1 || item2 === oldItem1 || item2 === oldItem2 || item2 === oldItem3);
+  item2Img.src = item2.url;
+
+  oldItem2 = item2;
+
+  do {item3 = allItemsForSale[Math.floor(Math.random() * allItemsForSale.length)];
+  } while (item3 === item2 || item3 === item1 || item3 === oldItem1 || item3 === oldItem2 || item3 === oldItem3);
+  item3Img.src = item3.url;
+
+  oldItem3 = item3;
+
 }
 pickNewItem();
 
-//total votes should be more then 25 for result to show
-var totalVotes = function(){
-  item1.votes + item2.votes + item3.votes;
-};
+//create a list
+function renderList(){
+  var position = document.getElementById('list-of-results');
+  for (var i = 0; i < allItemsForSale.length; i++ ) {
 
-// we access table in the DOM (html)
-var ItemTable = document.getElementById('votingResultTable'); 
+    var newEl = document.createElement('li');
 
-function renderItems(){
-  var trElement = document.createElement('tbody'); // create tr
-  var tdElement = document.createElement('td'); // create td / th
+    newEl.textContent = allItemsForSale[i].name + ' ----  votes: ' + allItemsForSale[i].votes + ' , displayed: ' + allItemsForSale[i].shows + ' , picked %:  ' + allItemsForSale[i].votePercent;
+    position.appendChild(newEl);
+  }
+}
 
-  tdElement.textContent = this.url; //give td content (name of each store)
-  trElement.appendChild(tdElement); //append td to tr
+// remove event listener with coutner at 25 and render the list
+function removeEvent(){
+  if (totalClickCounter === 25) {
+    item1Button.removeEventListener('click', item1Button.addEventListener);
+    item2Button.removeEventListener('click', item2Button.addEventListener);
+    item3Button.removeEventListener('click', item3Button.addEventListener);
+    renderList();
+  }
+}
+
+// function getTotalPercent() {
