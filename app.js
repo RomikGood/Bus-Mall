@@ -20,12 +20,12 @@ function Item(url, name) {
   this.shows = 0;
 }
 
-//udates from local storage
-if (localStorage) {
-  allItemsForSale = JSON.parse(localStorage.getItem('items'));}
-else {
+var allItemsForSale = [];
 
-  var allItemsForSale = [
+//udates from local storage
+if (!localStorage.items) {  
+
+  allItemsForSale = [
     new Item('img/bag.jpg', 'bag'),
     new Item('img/banana.jpg', 'banana'),
     new Item('img/bathroom.jpg','bathroom'),
@@ -48,7 +48,11 @@ else {
     new Item('img/wine-glass.jpg','wine-glass'),
 
   ];
+
+} else {
+  allItemsForSale = JSON.parse(localStorage.getItem('items'));
 }
+
 
 var item1 = allItemsForSale[0];
 var item2 = allItemsForSale[1];
@@ -112,28 +116,20 @@ function pickNewItem() {
 }
 pickNewItem();
 
-//create a list
-
+//create list to be display
 var arrayOfNames = [];
 var arrayOfVotes = [];
 
-//localStorage.getItem('arrayOfVotes') || 
-function renderList(){
 
-  // if (localStorage) {
-  //   allItemsForSale = JSON.parse(localStorage.getItem('items'));
-  // }
+function renderList(){
   var position = document.getElementById('list-of-results');
   for (var i = 0; i < allItemsForSale.length; i++ ) {
-    
-    
-
+    //pussed into arrays to be displayed on the char
     arrayOfNames.push(allItemsForSale[i].name);
     arrayOfVotes.push(allItemsForSale[i].votes);
-    
+    //set local storage
     localStorage.setItem('items', JSON.stringify(allItemsForSale));
-    // localStorage.setItem(arrayOfVotes);    
-    
+
     var newEl = document.createElement('li');
     newEl.textContent = allItemsForSale[i].name + ' ----  votes: ' + allItemsForSale[i].votes + ' , displayed: ' + allItemsForSale[i].shows;
     position.appendChild(newEl);
@@ -148,7 +144,7 @@ function removeEvent(){
     item3Button.removeEventListener('click', item3Button.addEventListener);
     //render list
     renderList();
-    
+
     //render chart
     Item.renderChart();
   }
