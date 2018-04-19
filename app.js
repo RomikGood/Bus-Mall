@@ -18,35 +18,40 @@ function Item(url, name) {
   this.name = name;
   this.votes = 0;
   this.shows = 0;
-  
-
 }
 
-var allItemsForSale = [
-  new Item('img/bag.jpg', 'bag'),
-  new Item('img/banana.jpg', 'banana'),
-  new Item('img/bathroom.jpg','bathroom'),
-  new Item('img/boots.jpg', 'boots'),
-  new Item('img/breakfast.jpg', 'breakfast'),
-  new Item('img/bubblegum.jpg', 'bubblegum'),
-  new Item('img/chair.jpg', 'chair'),
-  new Item('img/cthulhu.jpg', 'cthulhu'),
-  new Item('img/dog-duck.jpg','dog-duck'),
-  new Item('img/dragon.jpg','dragon'),
-  new Item('img/pen.jpg','pen'),
-  new Item('img/pet-sweep.jpg','pet-sweep'),
-  new Item('img/scissors.jpg','scissors'),
-  new Item('img/shark.jpg','shark'),
-  new Item('img/sweep.png','sweep'),
-  new Item('img/tauntaun.jpg','tauntaun'),
-  new Item('img/unicorn.jpg','unicorn'),
-  new Item('img/usb.gif','usb'),
-  new Item('img/water-can.jpg','water-can'),
-  new Item('img/wine-glass.jpg','wine-glass'),
+var allItemsForSale = [];
 
-];
+//if nothing in local storage
+if (!localStorage.items) {  
 
+  allItemsForSale = [
+    new Item('img/bag.jpg', 'bag'),
+    new Item('img/banana.jpg', 'banana'),
+    new Item('img/bathroom.jpg','bathroom'),
+    new Item('img/boots.jpg', 'boots'),
+    new Item('img/breakfast.jpg', 'breakfast'),
+    new Item('img/bubblegum.jpg', 'bubblegum'),
+    new Item('img/chair.jpg', 'chair'),
+    new Item('img/cthulhu.jpg', 'cthulhu'),
+    new Item('img/dog-duck.jpg','dog-duck'),
+    new Item('img/dragon.jpg','dragon'),
+    new Item('img/pen.jpg','pen'),
+    new Item('img/pet-sweep.jpg','pet-sweep'),
+    new Item('img/scissors.jpg','scissors'),
+    new Item('img/shark.jpg','shark'),
+    new Item('img/sweep.png','sweep'),
+    new Item('img/tauntaun.jpg','tauntaun'),
+    new Item('img/unicorn.jpg','unicorn'),
+    new Item('img/usb.gif','usb'),
+    new Item('img/water-can.jpg','water-can'),
+    new Item('img/wine-glass.jpg','wine-glass'),
 
+  ];
+
+} else {
+  allItemsForSale = JSON.parse(localStorage.getItem('items'));
+}
 
 
 var item1 = allItemsForSale[0];
@@ -111,21 +116,23 @@ function pickNewItem() {
 }
 pickNewItem();
 
-//create a list
-
+//create list to be display
 var arrayOfNames = [];
 var arrayOfVotes = [];
 
+
 function renderList(){
-  var position = document.getElementById('list-of-results');
+  //var position = document.getElementById('list-of-results');
   for (var i = 0; i < allItemsForSale.length; i++ ) {
-    
+    //pussed into arrays to be displayed on the char
     arrayOfNames.push(allItemsForSale[i].name);
     arrayOfVotes.push(allItemsForSale[i].votes);
-    
-    var newEl = document.createElement('li');
-    newEl.textContent = allItemsForSale[i].name + ' ----  votes: ' + allItemsForSale[i].votes + ' , displayed: ' + allItemsForSale[i].shows;
-    position.appendChild(newEl);
+    //set local storage
+    localStorage.setItem('items', JSON.stringify(allItemsForSale));
+
+    // var newEl = document.createElement('li');
+    // newEl.textContent = allItemsForSale[i].name + ' ----  votes: ' + allItemsForSale[i].votes + ' , displayed: ' + allItemsForSale[i].shows;
+    // position.appendChild(newEl);
   }
 }
 
@@ -135,7 +142,10 @@ function removeEvent(){
     item1Button.removeEventListener('click', item1Button.addEventListener);
     item2Button.removeEventListener('click', item2Button.addEventListener);
     item3Button.removeEventListener('click', item3Button.addEventListener);
+    //render list
     renderList();
+
+    //render chart
     Item.renderChart();
   }
 }
@@ -151,7 +161,8 @@ Item.renderChart = function(){
       datasets: [{
         label: 'Votes per Item',
         data: arrayOfVotes,
-        hoverBackgroundColor: 'black'
+        backgroundColor:'orange',
+        hoverBackgroundColor: 'gray'
       }]
     },
     options: {
