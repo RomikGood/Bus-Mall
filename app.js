@@ -22,7 +22,7 @@ function Item(url, name) {
 
 var allItemsForSale = [];
 
-//udates from local storage
+//if nothing in local storage
 if (!localStorage.items) {  
 
   allItemsForSale = [
@@ -122,7 +122,7 @@ var arrayOfVotes = [];
 
 
 function renderList(){
-  var position = document.getElementById('list-of-results');
+  //var position = document.getElementById('list-of-results');
   for (var i = 0; i < allItemsForSale.length; i++ ) {
     //pussed into arrays to be displayed on the char
     arrayOfNames.push(allItemsForSale[i].name);
@@ -130,9 +130,9 @@ function renderList(){
     //set local storage
     localStorage.setItem('items', JSON.stringify(allItemsForSale));
 
-    var newEl = document.createElement('li');
-    newEl.textContent = allItemsForSale[i].name + ' ----  votes: ' + allItemsForSale[i].votes + ' , displayed: ' + allItemsForSale[i].shows;
-    position.appendChild(newEl);
+    // var newEl = document.createElement('li');
+    // newEl.textContent = allItemsForSale[i].name + ' ----  votes: ' + allItemsForSale[i].votes + ' , displayed: ' + allItemsForSale[i].shows;
+    // position.appendChild(newEl);
   }
 }
 
@@ -161,7 +161,8 @@ Item.renderChart = function(){
       datasets: [{
         label: 'Votes per Item',
         data: arrayOfVotes,
-        hoverBackgroundColor: 'black'
+        backgroundColor:'orange',
+        hoverBackgroundColor: 'gray'
       }]
     },
     options: {
