@@ -150,7 +150,7 @@ function removeEvent(){
   }
 }
 
-/// didplay chart
+/// display chart
 Item.renderChart = function(){
   var ctx = document.getElementById('item-chart');
 
